@@ -31,7 +31,7 @@
                     const email = document.getElementById('email-input').value;
                     if (email.trim() && validateEmail(email)) {
                         try {
-                            const response = await fetch('http://localhost:8000/submit-email', {
+                            const response = await fetch('https://rehearsal-dun.vercel.app/submit-email', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
