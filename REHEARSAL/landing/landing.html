@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Landing Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>rehearsal</h1>
+            <p>Train yourself to be anything, anytime.</p>
+            <div class="input-container">
+                <input type="email" id="email-input" placeholder="enter email to join the waitlist" required>
+                <button id="send-button" onclick="logEmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="white" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        
+            <script>
+                document.getElementById('email-input').addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        logEmail();
+                    }
+                });
+
+                async function logEmail() {
+                    const email = document.getElementById('email-input').value;
+                    if (email.trim() && validateEmail(email)) {
+                        try {
+                            const response = await fetch('http://localhost:8000/submit-email', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ email })
+                            });
+                            console.log(response);
+                            const result = await response.json();
+                            if (response.ok) {
+                                // alert('Email submitted successfully!');
+                                document.getElementById('email-input').placeholder = 'submitted!';
+                                document.getElementById('email-input').value = '';
+                            } else {
+                                // alert('Failed to submit email: ' + result.message);
+                                document.getElementById('email-input').placeholder = 'failed :(';
+                                document.getElementById('email-input').value = '';
+                            }
+                        } catch (error) {
+                            // alert('An error occurred: ' + error.message);
+                            console.error(error);
+                            document.getElementById('email-input').placeholder = 'error :(';
+                            document.getElementById('email-input').value = '';
+                        }
+                    } else {
+                        // alert('Please enter a valid email address.');
+                        document.getElementById('email-input').placeholder = 'invalid email';
+                        document.getElementById('email-input').value = '';
+                    }
+                }
+        
+                function validateEmail(email) {
+                    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return re.test(email);
+                }
+            </script>
+        </div>
+    </section>
+    <!-- <footer>
+        <p>&copy; 2024 Rehearsal.</p>
+    </footer> -->
+    <script src="scripts.js"></script>
+</body>
+</html>
